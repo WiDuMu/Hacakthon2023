@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sliding Horizontal Bar Graph</title>
+    <style>
+        #graph-container {
+            width: 500px;
+            height: 50px;
+            border: 1px solid black;
+            position: relative;
+        }
+
+        #graph {
+            width: 100%;
+            height: 100%;
+            background-color: #ccc;
+            position: relative;
+        }
+
+        .zone {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #zone-1 {
+            width: 100%;
+            background-color: red;
+        }
+
+        #zone-2 {
+            width: 50%;
+            background-color: blue;
+        }
+
+
+        #drag-bar {
+            width: 10px;
+            height: 100%;
+            background-color: #333;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            cursor: col-resize;
+        }
+    </style>
+</head>
+<body>
+<div id="graph-container">
+    <div id="graph">
+        <div id="zone-1" class="zone"></div>
+        <div id="zone-2" class="zone"></div>
+        <div id="drag-bar"></div>
+    </div>
+</div>
+
+<script>
+    const graphContainer = document.querySelector('#graph-container');
+    const graph = document.querySelector('#graph');
+    const dragBar = document.querySelector('#drag-bar');
+    const zones = document.querySelectorAll('.zone');
+
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragOffsetX = 0;
+
+    dragBar.addEventListener('mousedown', e => {
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragOffsetX = dragBar.offsetLeft - graph.offsetLeft;
+    });
+
+    graph.addEventListener('mousemove', e => {
+        if (!isDragging) {
+            return;
+        }
+
+        const dragX = e.clientX - dragStartX;
+        const newDragBarX = dragOffsetX + dragX;
+        const minDragBarX = 0;
+        const maxDragBarX = graph.offsetWidth - dragBar.offsetWidth;
+
+        if (newDragBarX < minDragBarX) {
+            dragBar.style.left = `${minDragBarX}px`;
+        } else if (newDragBarX > maxDragBarX) {
+            dragBar.style.left = `${maxDragBarX}px`;
+        } else {
+            dragBar.style.left = `${newDragBarX}px`;
+        }
+
+        const dragBarPercentX = newDragBarX / maxDragBarX;
+        zones[1].style.width = `${dragBarPercentX * 100}%`;
+        zones[2].style.width = `${dragBarPercentX * 100}%`;
+    });
+
+    graph.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+</script>
+</body>
+</html>
