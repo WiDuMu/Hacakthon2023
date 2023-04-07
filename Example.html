@@ -72,7 +72,7 @@
         dragOffsetX = dragBar.offsetLeft - graph.offsetLeft;
     });
 
-    graph.addEventListener('mousemove', e => {
+    window.addEventListener('mousemove', e => {
         if (!isDragging) {
             return;
         }
