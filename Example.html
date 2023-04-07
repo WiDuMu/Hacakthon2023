@@ -95,9 +95,12 @@
         zones[2].style.width = `${dragBarPercentX * 100}%`;
     });
 
-    graph.addEventListener('mouseup', () => {
+    window.addEventListener('mouseup', () => {
         isDragging = false;
     });
+    window.addEventListener('mouseleave', () => {
+        isDragging = false;
+    })
 </script>
 </body>
 </html>
